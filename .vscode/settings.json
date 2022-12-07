@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.ejs": "html",
-        "sprite.h": "c",
-        "raylib.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
-}

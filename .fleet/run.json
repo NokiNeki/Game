@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name":"Build All",
+            "type":"command",
+            "program":"buildAll.bat"
+        },
+        {
+            "name":"Build Main",
+            "type":"command",
+            "program":"build.bat"
+        }
+    ]
+}

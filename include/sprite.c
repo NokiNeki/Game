@@ -80,9 +80,13 @@ void playerMove(struct Player *player, int moveSpeed, int interval) {
   if (player->momentum.x < 0) {
     player->direction = 0;
     player->texture = player->textureL;
+    player->hat = player->hatL;
+    player->hatPos = player->hatPosL;
   }
   else if (player->momentum.x > 0) {
     player->direction = 1;
     player->texture = player->textureR;
+    player->hat = player->hatR;
+    player->hatPos = player->hatPosR;
   }
 }

@@ -37,6 +37,7 @@ extern Texture2D textureFromSpriteSheet(Texture2D spriteSheet, int scale, Rectan
 
 struct Player {
   Vector2     pos;
+  Vector2     start;
   int         direction;
   Chunk       *currentChunk;
 
@@ -49,6 +50,13 @@ struct Player {
   Texture2D   textureR;
   Vector2     textureSize;
   double      scale;
+
+  Texture2D   hatR;
+  Texture2D   hatL;
+  Texture2D   hat;
+  Vector2     hatPosR;
+  Vector2     hatPosL;
+  Vector2     hatPos;
 
   int         grounded;
   Vector2     momentum;
