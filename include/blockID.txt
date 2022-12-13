@@ -1,0 +1,4 @@
+1-background
+2-wall
+3-interactive
+4-door
