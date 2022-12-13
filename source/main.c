@@ -24,7 +24,7 @@ int main() {
 
   Player player;
   player.pos =                  (Vector2){0, 0};
-  player.direction =            0;
+  player.direction =            (Vector2){0, 0};
   player.accelerator =          1;
   player.deaccelerator =        3;
   player.maxSpeed =             8;
@@ -33,6 +33,7 @@ int main() {
   player.scale =                SCALE;
   player.momentum =             (Vector2){0, 0};
   player.start = (Vector2){(SCREEN_WIDTH/2)-((player.textureSize.x*player.scale)/2),(SCREEN_HEIGHT/2)-((player.textureSize.y*player.scale)/2)};
+  player.origin = (Vector2){player.pos.x-SCREEN_WIDTH/2, player.pos.y-SCREEN_HEIGHT/2};
 
   player.textureL = textureFromSpriteSheet(spriteSheet, player.scale, (Rectangle){16,16*0, 16,16});
   player.textureR = textureFromSpriteSheet(spriteSheet, player.scale, (Rectangle){0,16*0, 16,16});
@@ -67,9 +68,16 @@ int main() {
   chunk.pos =   (Vector2){0,0};
   {
     Texture2D c = textureFromSpriteSheet(blockSheet, chunk.scale, (Rectangle){16,0, 16,16});
+    Texture2D d = textureFromSpriteSheet(blockSheet, chunk.scale, (Rectangle){16,16, 16,16});
     for (int i = 0; i < CHUNK_HEIGHT; i++) {
       for (int j = 0; j < CHUNK_WIDTH; j++) {
-        chunk.blocks[i][j].texture = c;
+        if ((i == 0 || i == CHUNK_HEIGHT-1) || (j == 0 || j == CHUNK_WIDTH-1)) {
+          chunk.blocks[i][j].texture = d;
+          chunk.blocks[i][j].id = (BlockID)WALL;
+        } else {
+          chunk.blocks[i][j].texture = c;
+          chunk.blocks[i][j].id = (BlockID)BACKGROUND;
+        }
         chunk.blocks[i][j].pos = (Vector2){16*j*chunk.scale, 16*i*chunk.scale};
       }
     }
@@ -79,11 +87,14 @@ int main() {
   chunk2.pos = (Vector2){CHUNK_WIDTH*16*chunk2.scale, 0};
   chunk2.chunkLeft = &chunk;
 
+  player.currentChunk = &chunk;
+
   int heartCounter = 0; // TESTING!!!!
 
   // Game Loop: ---------------------------------------------------------------------------------------------------------------------------
   while (!WindowShouldClose()) {
 
+    player.origin = (Vector2){player.pos.x+SCREEN_WIDTH/2, player.pos.y+SCREEN_HEIGHT/2};
     playerMove(&player, player.maxSpeed, 20);
     selectHotbar(&hud);
 
@@ -98,6 +109,8 @@ int main() {
       }
       hud.health.currentHeart = hud.health.texture[hud.health.status];
     }
+
+    printf(playerCollision(player) ? "True\n" : "False\n");
 
     BeginDrawing();
 

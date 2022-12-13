@@ -38,7 +38,8 @@ extern Texture2D textureFromSpriteSheet(Texture2D spriteSheet, int scale, Rectan
 struct Player {
   Vector2     pos;
   Vector2     start;
-  int         direction;
+  Vector2     direction;
+  Vector2     origin;
   Chunk       *currentChunk;
 
   int         health;
@@ -69,7 +70,9 @@ typedef struct Player Player;
 
 extern void playerMove(struct Player *player, int moveSpeed, int interval);
 
-extern void playerCollision(Player player, Chunk chunk);
+extern bool playerCollision(Player player);
+
+extern void moveChunks(Player *player);
 
 
 struct Heart {

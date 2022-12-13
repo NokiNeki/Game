@@ -9,9 +9,14 @@
 #define CHUNK_WIDTH 20
 #define CHUNK_HEIGHT 14
 
+enum BlockID {
+    BACKGROUND = 1,
+    WALL = 2
+};
+typedef enum BlockID BlockID;
 
 struct Block {
-    int id;
+    BlockID id;
     Texture2D texture;
     Vector2 pos;
     Rectangle size;
