@@ -62,6 +62,7 @@ int main() {
   hud.hotbarSize =      7;
   hud.hotbarBox =       textureFromSpriteSheet(hudSheet, hud.hotbarScale, (Rectangle){16,16, 16,16});
   hud.hotbarSelection = textureFromSpriteSheet(hudSheet, hud.hotbarScale, (Rectangle){0,16, 16,16});
+  hud.selectedHotbar = hud.hotbarSize/2;
 
   Chunk chunk;
   chunk.scale = SCALE;
@@ -81,6 +82,10 @@ int main() {
         chunk.blocks[i][j].pos = (Vector2){16*j*chunk.scale, 16*i*chunk.scale};
       }
     }
+    chunk.blocks[7][CHUNK_WIDTH-1].id = 1;
+    chunk.blocks[7][CHUNK_WIDTH-1].texture = c;
+    chunk.blocks[6][CHUNK_WIDTH-1].id = 1;
+    chunk.blocks[6][CHUNK_WIDTH-1].texture = c;
   }
 
   Chunk chunk2 = chunk;
@@ -110,7 +115,7 @@ int main() {
       hud.health.currentHeart = hud.health.texture[hud.health.status];
     }
 
-    printf(playerCollision(player) ? "True\n" : "False\n");
+    playerCollision(player);
 
     BeginDrawing();
 

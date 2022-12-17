@@ -12,17 +12,26 @@ Texture2D textureFromSpriteSheet(Texture2D spriteSheet, int scale, Rectangle pos
   return LoadTextureFromImage(sprite);
 }
 
-bool playerCollision(Player player) {
+void changeChunk(Player *player) {
+
+}
+
+// Fix moving along the wall
+Vector2 playerCollision(Player player) {
   int xpos = player.origin.x / (16*player.scale);
   int ypos = player.origin.y / (16*player.scale); 
-  // printf("Block ID: %d\n", player.currentChunk->blocks[ypos][xpos].id);
   int newx = (player.origin.x + (player.momentum.x)) / (16*player.scale);
   int newy = (player.origin.y + (player.momentum.y)) / (16*player.scale);
-  if (newx > -1 && newx < CHUNK_WIDTH && newy > -1 && newy < CHUNK_HEIGHT) {
-    // printf("Block ID UPCOMING: %d\n\n", player.currentChunk->blocks[newy][newx].id);
-    return player.currentChunk->blocks[newy][newx].id == 2 ? true : false;
+
+  Vector2 colideVector = (Vector2){0, 0}; // 0 = false, 1 = true
+  if (newx > -1 && newx < CHUNK_WIDTH) {
+    colideVector.x = player.currentChunk->blocks[ypos][newx].id == 2 ? 1 : 0;
   }
-  return false;
+  if (newy > -1 && newy < CHUNK_HEIGHT) {
+    colideVector.y = player.currentChunk->blocks[newy][xpos].id == 2 ? 1 : 0;
+  }
+
+  return colideVector;
 }
 
 void playerMove(struct Player *player, int moveSpeed, int interval) {
@@ -94,8 +103,10 @@ void playerMove(struct Player *player, int moveSpeed, int interval) {
     }
   }
 
-  if (!playerCollision(*player)) {
+  if (playerCollision(*player).x != 1) {
     player->pos.x += player->momentum.x;
+  }
+  if (playerCollision(*player).y != 1) {
     player->pos.y += player->momentum.y;
   }
 

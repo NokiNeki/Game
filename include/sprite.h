@@ -70,9 +70,9 @@ typedef struct Player Player;
 
 extern void playerMove(struct Player *player, int moveSpeed, int interval);
 
-extern bool playerCollision(Player player);
+extern Vector2 playerCollision(Player player);
 
-extern void moveChunks(Player *player);
+extern void changeChunk(Player *player);
 
 
 struct Heart {
