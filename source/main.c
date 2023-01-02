@@ -91,6 +91,7 @@ int main() {
   Chunk chunk2 = chunk;
   chunk2.pos = (Vector2){CHUNK_WIDTH*16*chunk2.scale, 0};
   chunk2.chunkLeft = &chunk;
+  chunk.chunkRight = &chunk2;
 
   player.currentChunk = &chunk;
 
@@ -115,7 +116,6 @@ int main() {
       hud.health.currentHeart = hud.health.texture[hud.health.status];
     }
 
-    playerCollision(player);
 
     BeginDrawing();
 
@@ -124,9 +124,14 @@ int main() {
       drawChunk(chunk, player.pos);
       drawChunk(chunk2, player.pos);
       DrawTexture(player.texture, player.start.x, player.start.y, RAYWHITE);
-      DrawTexture(player.hat, player.start.x+player.hatPos.x, player.start.y+player.hatPos.y, RAYWHITE);
+      // Draws Hat: -----------------------------------------------------------------------------------------
+      // DrawTexture(player.hat, player.start.x+player.hatPos.x, player.start.y+player.hatPos.y, RAYWHITE);
       drawHealth(&hud);
       drawHotbar(&hud);
+      changeChunk(&player);
+      DrawCircle(chunk.pos.x-player.pos.x, chunk.pos.y-player.pos.y, 3, BLUE);
+      DrawCircle(chunk2.pos.x-player.pos.x, chunk2.pos.y-player.pos.y, 3, GREEN);
+      DrawCircle(player.currentChunk->pos.x-player.pos.x, player.currentChunk->pos.y-player.pos.y, 3, RED);
 
     EndDrawing();
   }

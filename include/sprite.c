@@ -13,22 +13,46 @@ Texture2D textureFromSpriteSheet(Texture2D spriteSheet, int scale, Rectangle pos
 }
 
 void changeChunk(Player *player) {
+  // Moving right
+  if (player->origin.x > player->currentChunk->pos.x+(CHUNK_WIDTH*16* player->scale)) {
+    player->currentChunk = player->currentChunk->chunkRight;
+  }
 
+  // Moving left
+  if (player->origin.x < player->currentChunk->pos.x) {
+    player->currentChunk = player->currentChunk->chunkLeft;
+  }
 }
 
 // Fix moving along the wall
-Vector2 playerCollision(Player player) {
-  int xpos = player.origin.x / (16*player.scale);
-  int ypos = player.origin.y / (16*player.scale); 
-  int newx = (player.origin.x + (player.momentum.x)) / (16*player.scale);
-  int newy = (player.origin.y + (player.momentum.y)) / (16*player.scale);
+Vector2 playerCollision(Player *player) {
+  int xpos = (player->origin.x - player->currentChunk->pos.x) / (16*player->scale);
+  int ypos = (player->origin.y - player->currentChunk->pos.y) / (16*player->scale); 
+  int newx = ((player->origin.x - player->currentChunk->pos.x) + (player->momentum.x)) / (16*player->scale);
+  int newy = ((player->origin.y - player->currentChunk->pos.y) + (player->momentum.y)) / (16*player->scale);
+
+  Chunk chunkCheck = (*player->currentChunk);
+  int subtraction = 0;
+
+  // If player goes to the right of the chunk
+  if (player->origin.x + (player->momentum.x) > player->currentChunk->pos.x+(CHUNK_WIDTH*16* player->scale)) {
+    chunkCheck = *player->currentChunk->chunkRight;
+    newx -= CHUNK_WIDTH;
+    xpos -= CHUNK_WIDTH;
+  }
+  // If the player goes to the left of the chunk
+  if (player->origin.x + (player->momentum.x) < player->currentChunk->pos.x) {
+    chunkCheck = *player->currentChunk->chunkLeft;
+    newx -= CHUNK_WIDTH;
+    xpos -= CHUNK_WIDTH;
+  }
 
   Vector2 colideVector = (Vector2){0, 0}; // 0 = false, 1 = true
   if (newx > -1 && newx < CHUNK_WIDTH) {
-    colideVector.x = player.currentChunk->blocks[ypos][newx].id == 2 ? 1 : 0;
+    colideVector.x = chunkCheck.blocks[ypos][newx].id == 2 ? 1 : 0;
   }
   if (newy > -1 && newy < CHUNK_HEIGHT) {
-    colideVector.y = player.currentChunk->blocks[newy][xpos].id == 2 ? 1 : 0;
+    colideVector.y = chunkCheck.blocks[newy][xpos].id == 2 ? 1 : 0;
   }
 
   return colideVector;
@@ -103,10 +127,10 @@ void playerMove(struct Player *player, int moveSpeed, int interval) {
     }
   }
 
-  if (playerCollision(*player).x != 1) {
+  if (playerCollision(player).x != 1) {
     player->pos.x += player->momentum.x;
   }
-  if (playerCollision(*player).y != 1) {
+  if (playerCollision(player).y != 1) {
     player->pos.y += player->momentum.y;
   }
 
