@@ -86,10 +86,15 @@ int main() {
     chunk.blocks[7][CHUNK_WIDTH-1].texture = c;
     chunk.blocks[6][CHUNK_WIDTH-1].id = 1;
     chunk.blocks[6][CHUNK_WIDTH-1].texture = c;
+
+    chunk.blocks[7][0].id = 1;
+    chunk.blocks[7][0].texture = c;
+    chunk.blocks[6][0].id = 1;
+    chunk.blocks[6][0].texture = c;
   }
 
   Chunk chunk2 = chunk;
-  chunk2.pos = (Vector2){CHUNK_WIDTH*16*chunk2.scale, 0};
+  chunk2.pos = (Vector2){CHUNK_WIDTH*16*chunk2.scale-5, 0};
   chunk2.chunkLeft = &chunk;
   chunk.chunkRight = &chunk2;
 
