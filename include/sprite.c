@@ -48,11 +48,17 @@ Vector2 playerCollision(Player *player) {
   }
 
   Vector2 colideVector = (Vector2){0, 0}; // 0 = false, 1 = true
+  int xtally = 0;
+  int ytally = 0;
   if (newx > -1 && newx < CHUNK_WIDTH) {
+    xtally = colideVector.x <= 0 ? 1 : 0;
     colideVector.x = chunkCheck.blocks[ypos][newx].id == 2 ? 1 : 0;
+    colideVector.x -= xtally;
   }
   if (newy > -1 && newy < CHUNK_HEIGHT) {
+    ytally = colideVector.y >= 1 ? 1 : 0;
     colideVector.y = chunkCheck.blocks[newy][xpos].id == 2 ? 1 : 0;
+    colideVector.y -= ytally;
   }
 
   return colideVector;
@@ -127,6 +133,7 @@ void playerMove(struct Player *player, int moveSpeed, int interval) {
     }
   }
 
+  // Apply Motion if no collision ---------------------------------------------
   if (playerCollision(player).x != 1) {
     player->pos.x += player->momentum.x;
   }
